@@ -5,10 +5,10 @@ fetch('http://127.0.0.1:8080/api/v1/character-list/')
 
     data.results.forEach(obj => {
         html += `
-          <div>
-            <img src="${obj.image}">
-            <p>${obj.title}</p>
-            <p>${obj.short_description}</p>
+          <div class="character">
+            <img src="${obj.image}" class="character-image">
+            <p class="character-title">${obj.title}</p>
+            <p class="character-description">${obj.short_description}</p>
           </div>
         `;
     });
