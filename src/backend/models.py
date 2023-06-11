@@ -43,7 +43,7 @@ class TelegramUser(BaseModel):
         verbose_name="Фамилие", null=True, blank=True, max_length=255
     )
     character = models.ForeignKey(
-        "web.Character",
+        "backend.Character",
         related_name="tg_users",
         verbose_name="Персонаж",
         blank=True,
