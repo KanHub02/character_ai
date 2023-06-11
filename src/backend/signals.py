@@ -3,8 +3,8 @@ import asyncio
 from django.db.models.signals import pre_save
 from django.dispatch import receiver
 
-from web.models import Character
-from web.services.chat_gpt import GptRequestService
+from backend.models import Character
+from backend.services.chat_gpt import GptRequestService
 
 
 @receiver(pre_save, sender=Character)

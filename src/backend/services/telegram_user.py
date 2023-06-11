@@ -1,6 +1,6 @@
 from typing import ClassVar, List, Dict
 
-from web.models import TelegramUser, Character
+from backend.models import TelegramUser, Character
 
 
 class TelegramUserService:

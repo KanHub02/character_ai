@@ -6,7 +6,7 @@ from django.views.generic import ListView
 from django.db.models import QuerySet
 from django.urls import reverse
 
-from web.services.character import CharacterServices
+from backend.services.character import CharacterServices
 
 
 class CharacterListTemplateView(ListView):

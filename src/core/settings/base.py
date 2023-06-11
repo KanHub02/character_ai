@@ -19,8 +19,8 @@ PRODUCTION = env("PRODUCTION", default=False, cast=bool)
 # LOCAL_APPS
 LOCAL_APPS = [
     "common",
-    "web",
-    "front",
+    "backend",
+    "frontend",
 ]
 
 THIRD_PARTY_APPS = [

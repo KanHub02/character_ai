@@ -1,6 +1,6 @@
 from typing import Dict, ClassVar
 
-from web.models import Character
+from backend.models import Character
 
 
 class CharacterServices:

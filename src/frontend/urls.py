@@ -1,6 +1,6 @@
 from django.urls import path
 
-from front.views import CharacterListTemplateView
+from frontend.views import CharacterListTemplateView
 
 
 urlpatterns = [

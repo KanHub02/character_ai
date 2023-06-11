@@ -19,6 +19,7 @@ services:
       - db_network
       - redis_network
 
+
   db:
     image: postgres:14-alpine
     container_name: charai_db

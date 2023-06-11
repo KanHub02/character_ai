@@ -1,10 +1,10 @@
 from django.apps import AppConfig
 
 
-class WebConfig(AppConfig):
+class BackendConfig(AppConfig):
     default_auto_field = "django.db.models.BigAutoField"
-    name = "web"
-    verbose_name = "WebApp"
+    name = "backend"
+    verbose_name = "Основное"
 
     def ready(self) -> None:
-        import web.signals
+        import backend.signals

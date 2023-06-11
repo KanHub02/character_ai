@@ -6,8 +6,8 @@ from .serializers import (
     CharacterListSerializer,
 )
 
-from web.services.telegram_user import TelegramUserService
-from web.services.character import CharacterServices
+from backend.services.telegram_user import TelegramUserService
+from backend.services.character import CharacterServices
 
 from .tasks import send_amplitude_event_task
 
@@ -49,7 +49,7 @@ class TelegramUserCreateGeneric(generics.GenericAPIView):
 
 class TelegramUserCharacterSetView(views.APIView):
     def get(self, request):
-        
+
         user_id = self.request.query_params.get("user_id")
         character_id = self.request.query_params.get("character_id")
         if user_id and character_id:

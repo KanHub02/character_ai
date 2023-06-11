@@ -5,7 +5,7 @@ from asgiref.sync import async_to_sync
 
 from celery import shared_task
 
-from web.services.amplitude import AmplitudeRequestService
+from backend.services.amplitude import AmplitudeRequestService
 
 
 @shared_task
