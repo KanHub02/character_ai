@@ -1,8 +1,3 @@
-import asyncio
-from asgiref.sync import async_to_sync
-
-from django.shortcuts import render
-
 from rest_framework import generics, response, views
 
 from .serializers import (
@@ -11,10 +6,10 @@ from .serializers import (
     CharacterListSerializer,
 )
 
-from web.services.amplitude import AmplitudeRequestService
-from web.services.chat_gpt import GptRequestService
 from web.services.telegram_user import TelegramUserService
 from web.services.character import CharacterServices
+
+from .tasks import send_amplitude_event_task
 
 
 class AmplitudeGenericView(generics.GenericAPIView):
@@ -23,14 +18,9 @@ class AmplitudeGenericView(generics.GenericAPIView):
     def post(self, request):
         serializer = self.serializer_class(data=request.data)
         if serializer.is_valid(raise_exception=True):
-            loop = asyncio.new_event_loop()
-            asyncio.set_event_loop(loop)
-            send_event = loop.create_task(
-                AmplitudeRequestService.send_event(
-                    serializer.data["device_id"], serializer.data["event_type"]
-                )
+            send_amplitude_event_task.delay(
+                serializer.data["device_id"], serializer.data["event_type"]
             )
-            loop.run_until_complete(send_event)
 
             return response.Response(
                 {
@@ -58,7 +48,8 @@ class TelegramUserCreateGeneric(generics.GenericAPIView):
 
 
 class TelegramUserCharacterSetView(views.APIView):
-    def post(self, request):
+    def get(self, request):
+        
         user_id = self.request.query_params.get("user_id")
         character_id = self.request.query_params.get("character_id")
         if user_id and character_id:

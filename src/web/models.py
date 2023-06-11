@@ -18,7 +18,9 @@ class Character(BaseModel):
         upload_to="web/character/%Y/%m/%d/",
         validators=[FileExtensionValidator(allowed_extensions=["png", "jpg", "jpeg"])],
     )
-    short_description = models.CharField(max_length=255, verbose_name="Краткое описание", null=True, blank=True)
+    short_description = models.CharField(
+        max_length=255, verbose_name="Краткое описание", null=True, blank=True
+    )
 
     class Meta:
         db_table = "character"
@@ -56,20 +58,3 @@ class TelegramUser(BaseModel):
 
     def __str__(self) -> str:
         return self.username
-
-
-class Amplitude(BaseModel):
-    device_id = models.CharField(
-        verbose_name="Device ID", null=False, blank=False, max_length=255
-    )
-    event_type = models.CharField(
-        verbose_name="Event", null=False, blank=False, max_length=255
-    )
-
-    class Meta:
-        db_table = "amplitude"
-        verbose_name = "amplitude"
-        verbose_name_plural = "amplitude"
-
-    def __str__(self) -> str:
-        return f"{self.device_id} - {self.event_type}"

@@ -1,0 +1,74 @@
+version: '3.9'
+
+services:
+  back:
+    restart: unless-stopped
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - 8080:8080
+    env_file:
+      - ./src/.env
+    entrypoint: "sh /opt/services/charai-web/entrypoints/server.sh"
+    volumes:
+      - ./:/opt/services/charai-web
+      - ./src/back_static:/opt/services/charai-web/src/back_static
+      - ./src/back_media:/opt/services/charai-web/src/back_media
+    networks:
+      - db_network
+      - redis_network
+
+  db:
+    image: postgres:14-alpine
+    container_name: charai_db
+    restart: unless-stopped
+    labels:
+    - com.packtpub.compose.app=db-manager 
+    volumes:
+      - ./data/init.sql:/docker-entrypoint-initdb.d/init.sql
+      - ./data/storage/data:/var/lib/postgresql/data
+    networks:
+      - db_network
+    env_file:
+      - ./src/.env
+  
+  celery:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    entrypoint: "sh /opt/services/charai-web/entrypoints/celery.sh"
+    volumes:
+      - ./:/opt/services/charai-web
+    env_file:
+      - ./src/.env
+    depends_on:
+      - back
+      - redis
+    networks:
+      - redis_network
+
+  redis:
+    image: redis
+    ports:
+    - 6379:6379
+    env_file:
+      - ./src/.env
+    entrypoint: ["redis-server","/usr/local/etc/redis/redis.conf"]
+    labels:
+    - com.packtpub.compose.app=cache-manager
+    volumes:
+    - ./data/redis/conf/redis.conf:/usr/local/etc/redis/redis.conf
+    - redis-data:/data
+    networks:
+      - redis_network
+
+
+volumes:
+  redis-data: 
+
+networks:
+  db_network:
+    driver: bridge
+  redis_network:
+    driver: bridge

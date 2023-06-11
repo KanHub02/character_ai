@@ -2,9 +2,13 @@
 import os
 from pathlib import Path
 from decouple import config as env
+from decouple import Csv as csv
 
 # BASE_DIR
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
+
+SECRET_KEY = env("SECRET_KEY")
+DEBUG = env("DEBUG")
 
 # Production
 PRODUCTION = env("PRODUCTION", default=False, cast=bool)
@@ -27,11 +31,10 @@ THEME_APPS = [
     "jazzmin",
 ]
 
-
 INSTALLED_APPS = [
     *THEME_APPS,
-    "django.contrib.admin",
     "django.contrib.auth",
+    "django.contrib.admin",
     "django.contrib.contenttypes",
     "django.contrib.sessions",
     "django.contrib.messages",
@@ -100,6 +103,12 @@ SMALL_THUMBNAIL_SIZE = 512, 512
 MEDIUM_THUMBNAIL_SIZE = 1024, 1024
 BIG_THUMBNAIL_SIZE = 1400, 1400
 
+# Celery settings
+CELERY_BROKER_URL = env("CELERY_BROKER")
+CELERY_RESULT_BACKEND = env("CELERY_BACKEND")
+CELERY_RESULT_SERIALIZER = "json"
+CELERY_TASK_SERIALIZER = "json"
+
 
 REST_FRAMEWORK = {
     "PAGE_SIZE": 13,
@@ -107,13 +116,28 @@ REST_FRAMEWORK = {
     "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.LimitOffsetPagination",
 }
 
+# ALLOWED_HOSTS
+ALLOWED_HOSTS = env("ALLOWED_HOSTS", cast=csv())
+
+# Database
+DATABASES = {
+    "default": {
+        "ENGINE": "django.db.backends.postgresql_psycopg2",
+        "NAME": env("POSTGRES_DB"),
+        "USER": env("POSTGRES_USER"),
+        "PASSWORD": env("POSTGRES_PASSWORD"),
+        "HOST": env("POSTGRES_HOST"),
+        "PORT": env("POSTGRES_PORT", cast=int),
+    }
+}
 
 from .themes import *
+from .cors import *
 
-if not PRODUCTION:
-    from .local import *
-else:
-    from .production import *
+# if not PRODUCTION:
+#     from .local import *
+# else:
+#     from .production import *
 
 
 # REDIS_URL = "redis://redis:6370"

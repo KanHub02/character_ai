@@ -1,6 +1,8 @@
 from django.urls import path
 
-from front.views import main_menu
+from front.views import CharacterListTemplateView
 
 
-urlpatterns = [path("main-menu/", main_menu, name="main-menu")]
+urlpatterns = [
+    path("menu/", CharacterListTemplateView.as_view(), name="test-menu"),
+]

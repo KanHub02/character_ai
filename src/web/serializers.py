@@ -2,7 +2,7 @@ import typing
 
 from rest_framework import serializers
 
-from .models import Amplitude, TelegramUser, Character
+from .models import TelegramUser, Character
 
 
 class AmplitudeSerializer(serializers.Serializer):

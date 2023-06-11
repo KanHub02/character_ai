@@ -6,7 +6,26 @@
   <link rel="stylesheet" href="{% static 'styles.css' %}">
 </head>
 <body>
-  <div id="data-content"></div>
-  <script src="{% static 'main.js' %}"></script>
+  <div id="data-content">
+    {% for obj in object_list %}
+    <a class='char-box' id="charLink{{ obj.id }}" href="#">
+      <img src="{{ obj.image.url }}" class="character-image">
+      <p class="character-title">{{ obj.title }}</p>
+      <p class="character-description">{{ obj.short_description }}</p>
+    </a>
+    {% endfor %}
+  </div>
+
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <script>
+    let tg = window.Telegram.WebApp;
+    let tg_user_id = tg.initDataUnsafe.user.id;
+    var charLinks = document.querySelectorAll('.char-box');
+    charLinks.forEach(function(link) {
+      var objId = link.id.replace('charLink', '');
+      link.href = "http://0.0.0.0:8080/api/v1/telegram-user/set-character/?character_id=" + objId + "&user_id=" + tg_user_id;
+    });
+  </script>
+
 </body>
 </html>
